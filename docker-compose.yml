@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    restart: always
+  
   backend:
     build:
       context: ./backend
@@ -18,18 +30,6 @@ services:
     depends_on:
       - mysql
     restart: always
-
-  mysql:
-    image: mysql:8.0
-    container_name: mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
-    volumes:
-      - ./mysql/init:/docker-entrypoint-initdb.d
-    restart: always
     
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -42,6 +42,17 @@ services:
       PMA_PASSWORD: rootpassword # MySQL 密码
     depends_on:
       - mysql
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: frontend-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled:ro
     restart: always
 
 volumes:
