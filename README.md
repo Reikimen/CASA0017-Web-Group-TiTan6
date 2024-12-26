@@ -24,11 +24,18 @@
 
     sudo docker-compose down
 
+ **强制重建所有服务并启动**  
+  ```bash
+  docker-compose up --build -d
+  ```
+
 **Access Services:**
 
     Frontend: http://localhost:8080
 
     Backend: http://localhost:4000
+
+    mysql(phpMyAdmin): http://localhost:8081
 
 
 ## **What should I do if "listen tcp4 0.0.0.0:3306: bind: address already in use"**

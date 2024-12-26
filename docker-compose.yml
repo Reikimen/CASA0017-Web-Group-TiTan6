@@ -30,6 +30,19 @@ services:
     volumes:
       - ./mysql/init:/docker-entrypoint-initdb.d
     restart: always
+    
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - "8081:80" # 映射到宿主机的 8081 端口
+    environment:
+      PMA_HOST: mysql      # 指向 MySQL 服务名称
+      PMA_USER: root       # MySQL 用户名
+      PMA_PASSWORD: rootpassword # MySQL 密码
+    depends_on:
+      - mysql
+    restart: always
 
 volumes:
   mysql_data:
